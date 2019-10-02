@@ -1,6 +1,5 @@
 package com.kodilla.stream.array;
 
-import array.ArrayOperations;
 import org.junit.Assert;
 import org.junit.Test;
 
