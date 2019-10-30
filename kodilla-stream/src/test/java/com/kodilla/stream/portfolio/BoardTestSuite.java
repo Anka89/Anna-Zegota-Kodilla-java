@@ -75,9 +75,8 @@ public class BoardTestSuite {
 
     @Test
     public void testAddTaskList() {
-        //Given
-        Board project = prepareTestData();
         //When
+        Board project = prepareTestData();
 
         //Then
         Assert.assertEquals(3, project.getTaskLists().size());
