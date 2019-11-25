@@ -17,18 +17,18 @@ public class Application {
         final String movies = movieMap.entrySet()
                 .stream()
                 .flatMap(entry -> entry.getValue().stream())
-                .collect( Collectors.joining(" ! "));
+                .collect( Collectors.joining(" # "));
         System.out.println(movies);
 
         final String moviesAndShortcuts = movieMap.entrySet()
                 .stream()
-                .flatMap(n -> {
-                    List<String> list = new ArrayList<>();
+                .flatMap( n -> {
+                    List<String> list = new ArrayList<>( );
                     list.add(n.getKey());
                     list.addAll(n.getValue());
                     return list.stream();
-                })
-                .collect((Collectors.joining(" ! ")));
+                } )
+                .collect( Collectors.joining(" @ "));
         System.out.println(moviesAndShortcuts);
         System.out.println();
         System.out.println();
