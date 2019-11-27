@@ -30,7 +30,9 @@ public class Customer {
 
         Customer customer = (Customer) o;
 
-        if (!getSurname().equals( customer.getSurname() ) && (!getName().equals( customer.getName() ))) return false;
+        if (!getSurname().equals( customer.getSurname() ) && (!getName().equals( customer.getName() ))) {
+            return false;
+        }
         return getID().equals( customer.getID() );
     }
 
