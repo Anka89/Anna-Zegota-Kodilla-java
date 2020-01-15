@@ -57,5 +57,10 @@ public class InvoiceDaoTestSuite {
         Assert.assertEquals(invoiceId, invoiceReadFromDB.getId());
         Assert.assertEquals(3, itemSize);
         Assert.assertEquals(itemSize, invoiceReadFromDB.getItems().size());
+
+        try {
+            invoiceDao.deleteById(invoiceId);
+        } catch (Exception e) {
+        }
     }
 }

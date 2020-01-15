@@ -3,18 +3,24 @@ package com.kodilla.hibernate.manytomany.dao;
 import com.kodilla.hibernate.manytomany.Company;
 import com.kodilla.hibernate.manytomany.Employee;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CompanyDaoTestSuite {
     @Autowired
     CompanyDao companyDao;
+    @Autowired
+    EmployeeDao employeeDao;
 
+    @Ignore
     @Test
     public void testSaveManyToMany(){
         //Given
@@ -52,12 +58,71 @@ public class CompanyDaoTestSuite {
         Assert.assertNotEquals(0, greyMatterId);
 
         //CleanUp
-        //try {
-        //    companyDao.deleteById(softwareMachineId);
-        //    companyDao.deleteById(dataMaestersId);
-        //    companyDao.deleteById(greyMatterId);
-        //} catch (Exception e) {
-        //    //do nothing
-        //}
+        try {
+        companyDao.deleteById(softwareMachineId);
+        companyDao.deleteById(dataMaestersId);
+        companyDao.deleteById(greyMatterId);
+        } catch (Exception e) {
+        }
     }
-}
+    @Test
+    public void testNamedQueries(){
+
+        //Given
+        Employee johnSmith = new Employee("John", "Smith");
+        Employee stephanieClarckson = new Employee("Stephanie", "Clarckson");
+        Employee lindaSmith = new Employee("Linda", "Smith");
+
+        Company softwareMachine = new Company("Software Machine");
+        Company softDataMasters = new Company("Soft Data Masters");
+        Company greyMatter = new Company("Grey Matter");
+
+        softwareMachine.getEmployees().add(johnSmith);
+        softDataMasters.getEmployees().add(stephanieClarckson);
+        softDataMasters.getEmployees().add(lindaSmith);
+        greyMatter.getEmployees().add(johnSmith);
+        greyMatter.getEmployees().add(lindaSmith);
+
+        johnSmith.getCompanies().add(softwareMachine);
+        johnSmith.getCompanies().add(greyMatter);
+        stephanieClarckson.getCompanies().add(softDataMasters);
+        lindaSmith.getCompanies().add(softDataMasters);
+        lindaSmith.getCompanies().add(greyMatter);
+
+
+        employeeDao.save(johnSmith);
+        employeeDao.save(stephanieClarckson);
+        employeeDao.save(lindaSmith);
+
+
+        companyDao.save(softwareMachine);
+        companyDao.save(softDataMasters);
+        companyDao.save(greyMatter);
+
+        //When
+        List<Employee> lastName = employeeDao.retrieveEmployeeWithLastname("Smith");
+        List<Company> nameStartedWith = companyDao.retrieveCompanyNameLike("Sof");
+
+        int softwareMachineId = softwareMachine.getId();
+        int softwareMaestersId = softDataMasters.getId();
+        int greyMatterId = greyMatter.getId();
+
+        int johnSmithId = johnSmith.getId();
+        int stephanieClarcsonId = stephanieClarckson.getId();
+        int lindaSmithId = lindaSmith.getId();
+
+        //Then
+        Assert.assertEquals(2, lastName.size());
+        Assert.assertEquals(2, nameStartedWith.size());
+
+        //CleanUp
+        companyDao.deleteById(softwareMachineId);
+        companyDao.deleteById(softwareMaestersId);
+        companyDao.deleteById(greyMatterId);
+
+        employeeDao.deleteById(johnSmithId);
+        employeeDao.deleteById(stephanieClarcsonId);
+        employeeDao.deleteById(lindaSmithId);
+        }
+    }
+
